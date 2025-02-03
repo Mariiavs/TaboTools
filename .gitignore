@@ -1,3 +1,7 @@
 *.ipynb_checkpoints/
 drafts/
 __pycache__/
+tests/
+tabotools.egg-info/
+build/
+dist/

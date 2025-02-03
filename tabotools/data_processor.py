@@ -71,7 +71,7 @@ class DataProcessor(FileLoader, DataPreprocessor, ExploratoryDataAnalyzer):
             categorical_columns=categorical_columns, unique_threshold=unique_threshold, include_numeric=include_numeric
         )
 
-        if unique_summary:
+        if unique_summary is not None:
 
             Visualizer.show_title('Анализ категориальных признаков')
             Visualizer.show_title('Количество уникальных значений в столбцах')
@@ -89,7 +89,7 @@ class DataProcessor(FileLoader, DataPreprocessor, ExploratoryDataAnalyzer):
        
         num_description, extrems, figs = self.analyze_numerical(numerical_columns=numerical_columns)
 
-        if num_description:
+        if num_description is not None:
             
             Visualizer.show_title('Анализ количественных признаков')
 
@@ -110,7 +110,7 @@ class DataProcessor(FileLoader, DataPreprocessor, ExploratoryDataAnalyzer):
             time_columns=time_columns, target_value=target_value
         )
 
-        if time_description:
+        if time_description is not None:
             
             Visualizer.show_title('Анализ временных признаков')
             Visualizer.show_title('Сводная статистика')
