@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="tabotools",
-    version="0.1.0",
+    version="0.1.1",
     author="Maria",
     author_email="vpays.am@gmail.com",
     description="A data tools library for loading, preprocessing, exploratory analysis, and visualization.",

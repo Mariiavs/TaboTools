@@ -1,4 +1,4 @@
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 from .file_loader import FileLoader
 from .data_preprocessor import DataPreprocessor 
