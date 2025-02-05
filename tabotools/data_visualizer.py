@@ -26,6 +26,11 @@ class Visualizer:
 
     
     @staticmethod
+    def show_text(text: str):
+        return HTML(text)
+
+        
+    @staticmethod
     def show_info(df: pd.DataFrame, name: str, path: str, return_html=False):
 
         content = Visualizer.show_title(name,  title_size=20, return_html=True)

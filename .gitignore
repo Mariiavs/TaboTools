@@ -5,3 +5,5 @@ tests/
 tabotools.egg-info/
 build/
 dist/
+*.ipynb
+*.csv

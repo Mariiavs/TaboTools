@@ -24,6 +24,7 @@ class DataProcessor(FileLoader, DataPreprocessor, ExploratoryDataAnalyzer):
 
         ExploratoryDataAnalyzer.__init__(self, self.data, self.name, cat_cols, num_cols, time_cols, target_name)
 
+    
     def info(self):
         
         data_info = pd.DataFrame(
@@ -40,30 +41,57 @@ class DataProcessor(FileLoader, DataPreprocessor, ExploratoryDataAnalyzer):
         return data_info
 
     
-    def data_preprocessor(self, threshold: int = 0.8, string_columns: list = None):
-
+    def show_data_types(self):
+        
         Visualizer.show_title('Типы данных')
         display(self.check_types())
+
+    
+    def show_missing_info(self):
         
         Visualizer.show_title('Пропуски')
-        display(self.get_missing_info())
+        missing_info = self.get_missing_info()
+        
+        if not missing_info.empty:
+            display(missing_info)
+        else:
+            display(Visualizer.show_text('В таблице нет пропусков'))
+
+    
+    def show_duplicates_info(self):
         
         Visualizer.show_title('Полные дубликаты')
         count, part, sample = self.get_duplicates_info()
-        print(f'В таблице {count} ({round(part, 6)*100}%) дубликатов')
-        display(sample)
+        
+        if count > 0:
+            display(Visualizer.show_text(f'В таблице {count} ({round(part, 6)*100}%) дубликатов'))
+            display(sample)
+        else:
+            display(Visualizer.show_text('В таблице нет дубликатов'))
 
+    
+    def show_fuzzy_duplicates(self, threshold: int, string_columns: list):
+        
+        Visualizer.show_title('Неявные дубликаты в строковых столбцах')
         fuzzy_duplicates = self.find_fuzzy_duplicates(threshold=threshold, string_columns=string_columns)
+        
         if fuzzy_duplicates:
-            Visualizer.show_title('Неявные дубликаты в строковых столбцах')
             for column, df in fuzzy_duplicates.items():
                 Visualizer.show_title(column)
                 display(df)
         else:
-            Visualizer.show_title('Не обнаружено неявных дубликатов')
-                
-        return None        
+            display(Visualizer.show_text('Не обнаружено неявных дубликатов'))
 
+    
+    def data_preprocessor(self, threshold: int = 0.8, string_columns: list = None):
+        
+        self.show_data_types()
+        self.show_missing_info()
+        self.show_duplicates_info()
+        self.show_fuzzy_duplicates(threshold, string_columns)
+        
+        return None
+    
     
     def analyze_categorical_features(self, categorical_columns: list = None, unique_threshold: int = 15, include_numeric: bool = True):
        
@@ -118,7 +146,7 @@ class DataProcessor(FileLoader, DataPreprocessor, ExploratoryDataAnalyzer):
 
             for i, column in enumerate(self.time_cols):
                 Visualizer.show_title(column)
-                print(f"Средний интервал между записями: {avg_deltas[i]}\n")
+                display(Visualizer.show_text(f"Средний интервал между записями: {avg_deltas[i]}\n"))
                 display(intervals[i])
                 display(rolling_means[i])
 

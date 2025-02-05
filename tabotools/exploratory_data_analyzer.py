@@ -66,7 +66,10 @@ class ExploratoryDataAnalyzer():
             result_tables = []
             
             column_data = self.data[cat_column].value_counts().reset_index(name='count')
-            column_data['part,%'] = column_data['count'].apply(lambda x: round(x/column_data['count'].sum() * 100, 2))
+            column_data.columns = [cat_column, 'count'] ############
+            
+            sum_data = column_data['count'].sum()
+            column_data['part,%'] = column_data['count'].apply(lambda x: round(x/sum_data * 100, 2))
     
             combined_data = Visualizer.preview_data(column_data)
             
@@ -78,7 +81,7 @@ class ExploratoryDataAnalyzer():
             
             fig = Visualizer.bar_plot(aggregate_data, 'count', cat_column, 
                                 f'Распределение категорий в столбце {cat_column}', 'Количество', cat_column)
-    
+
             return result_tables, fig
         else:
             return 'Не передана категория'
@@ -163,8 +166,11 @@ class ExploratoryDataAnalyzer():
 
         else:
             time_df = self.data.sort_values(time_column)
-        
-        info = time_df[time_column].describe()
+
+        try: 
+            column_describe = self.data[self.time_cols].describe(datetime_is_numeric=True)
+        except:
+            column_describe = self.data[self.time_cols].describe()
         
         avg_delta = time_df[time_column].diff().mean()
     
@@ -191,11 +197,11 @@ class ExploratoryDataAnalyzer():
             plt.legend()
             plt.grid(True, linestyle="--", alpha=0.5)
             plt.tight_layout()
-            plt.close(fig)
+            plt.close(fig1)
         else:
             fig1 = None
 
-        return info, avg_delta, fig, fig1
+        return column_describe, avg_delta, fig, fig1
 
     def analyze_time_series(self, time_columns: list = None, target_value: str = None):
 
@@ -203,9 +209,13 @@ class ExploratoryDataAnalyzer():
             self.set_time_cols(time_columns)
 
         if not self.time_cols:
-            return None, None, None
+            return None, None, None, None
+
+        try: 
+            columns_describe = self.data[self.time_cols].describe(datetime_is_numeric=True)
+        except:
+            columns_describe = self.data[self.time_cols].describe()
             
-        columns_describe = self.data[self.time_cols].describe()
         avg_deltas = []
         intervals = []
         rolling_means = []
