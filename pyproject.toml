@@ -24,4 +24,4 @@ Repository = "https://github.com/Mariiavs/tabotools"
 Issues = "https://github.com/Mariiavs/tabotools/issues"
 
 [tool.setuptools]
-packages = ["tabotools"]  # Если в проекте используется __init__.py
+packages = ["tabotools"]
