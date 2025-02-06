@@ -164,7 +164,10 @@ class Visualizer:
     def bar_plot(df: pd.DataFrame, x: str, y: str, title, xlabel, ylabel, size: tuple = (10, 4)):
 
         fig, ax = plt.subplots(figsize=size)
-        sns.barplot(data=df, y=y, x=x, hue=y, ax=ax, palette='viridis', legend=False)
+        try:
+            sns.barplot(data=df, y=y, x=x, hue=y, ax=ax, palette='viridis', legend=False)
+        except:
+            sns.barplot(data=df, y=y, x=x, ax=ax, palette='viridis')
 
         Visualizer.annotate(ax, kind=1)
         Visualizer.configure_axis_labels(ax, title, xlabel, ylabel)

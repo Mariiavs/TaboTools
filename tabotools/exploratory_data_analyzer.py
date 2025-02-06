@@ -65,8 +65,8 @@ class ExploratoryDataAnalyzer():
         if cat_column:
             result_tables = []
             
-            column_data = self.data[cat_column].value_counts().reset_index(name='count')
-            column_data.columns = [cat_column, 'count'] ############
+            column_data = self.data[cat_column].value_counts().reset_index()
+            column_data.columns = [cat_column, 'count'] 
             
             sum_data = column_data['count'].sum()
             column_data['part,%'] = column_data['count'].apply(lambda x: round(x/sum_data * 100, 2))
