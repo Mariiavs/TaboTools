@@ -10,18 +10,22 @@ from .data_visualizer import Visualizer
 class DataProcessor(FileLoader, DataPreprocessor, ExploratoryDataAnalyzer):
 
     def __init__(self, 
-                 file_path: str, 
+                 file_path: str = None, 
                  name: str = None, 
                  parse_dates: list = None,
                  cat_cols: list = None, 
                  num_cols: list = None, 
                  time_cols: list = None, 
-                 target_name: str = None):
+                 target_name: str = None, 
+                 data: pd.DataFrame = None):
 
-        FileLoader.__init__(self, file_path, name, parse_dates)
+        if not file_path is None:
+            FileLoader.__init__(self, file_path, name, parse_dates)
+            DataPreprocessor.__init__(self, self.data, self.name)
 
-        DataPreprocessor.__init__(self, self.data, self.name)
-
+        else:
+            DataPreprocessor.__init__(self, data, name)
+            
         ExploratoryDataAnalyzer.__init__(self, self.data, self.name, cat_cols, num_cols, time_cols, target_name)
 
     
